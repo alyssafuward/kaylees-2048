@@ -1,7 +1,8 @@
 import { Tile } from "@/hooks/use2048";
 import { useEffect, useState } from "react";
+import { type GameMode, getPureColor } from "@/lib/gameMode";
 
-// Tile color map using CSS variable names
+// Tile color map for Rainbow Numbers mode
 const TILE_COLORS: Record<number, { bg: string; shadow: string; text: string }> = {
   2:    { bg: "hsl(0,90%,60%)",    shadow: "0 0 18px hsl(0,90%,60%,0.7)",    text: "#fff" },
   4:    { bg: "hsl(25,100%,58%)",  shadow: "0 0 18px hsl(25,100%,58%,0.7)",  text: "#fff" },
@@ -17,9 +18,8 @@ const TILE_COLORS: Record<number, { bg: string; shadow: string; text: string }> 
           shadow: "0 0 40px hsl(280,100%,68%,0.9), 0 0 80px hsl(180,100%,60%,0.5)", text: "#fff" },
 };
 
-function getColor(value: number) {
+function getRainbowColor(value: number) {
   if (TILE_COLORS[value]) return TILE_COLORS[value];
-  // Cycling rainbow for values beyond 2048
   const cycle = [
     TILE_COLORS[2], TILE_COLORS[4], TILE_COLORS[8], TILE_COLORS[16],
     TILE_COLORS[32], TILE_COLORS[64], TILE_COLORS[128],
@@ -39,9 +39,10 @@ interface Props {
   tile: Tile;
   cellSize: number;
   gap: number;
+  mode: GameMode;
 }
 
-export default function GameTile({ tile, cellSize, gap }: Props) {
+export default function GameTile({ tile, cellSize, gap, mode }: Props) {
   const [animClass, setAnimClass] = useState("");
 
   useEffect(() => {
@@ -54,7 +55,12 @@ export default function GameTile({ tile, cellSize, gap }: Props) {
     return () => clearTimeout(t);
   }, [tile.isMerged, tile.isNew, tile.id]);
 
-  const { bg, shadow, text } = getColor(tile.value);
+  const isRainbow = mode === "rainbow";
+  const rainbow = getRainbowColor(tile.value);
+  const pure = getPureColor(tile.value);
+  const bg = isRainbow ? rainbow.bg : pure.bg;
+  const shadow = isRainbow ? rainbow.shadow : pure.shadow;
+  const text = isRainbow ? rainbow.text : "transparent";
 
   const x = tile.col * (cellSize + gap) + gap;
   const y = tile.row * (cellSize + gap) + gap;
@@ -70,15 +76,15 @@ export default function GameTile({ tile, cellSize, gap }: Props) {
         background: bg,
         boxShadow: shadow,
         color: text,
-        fontSize: getFontSize(tile.value),
+        fontSize: isRainbow ? getFontSize(tile.value) : 0,
         letterSpacing: "-0.02em",
         transition: "left 0.12s ease, top 0.12s ease",
         zIndex: tile.isMerged ? 10 : 5,
-        textShadow: "0 1px 4px rgba(0,0,0,0.4)",
+        textShadow: isRainbow ? "0 1px 4px rgba(0,0,0,0.4)" : "none",
         willChange: "transform",
       }}
     >
-      {tile.value}
+      {isRainbow ? tile.value : null}
     </div>
   );
 }

@@ -1,16 +1,17 @@
 import { Tile } from "@/hooks/use2048";
 import GameTile from "./GameTile";
 import { useMemo } from "react";
+import { type GameMode } from "@/lib/gameMode";
 
 const GAP = 10;
 const BOARD_PADDING = 10;
 
 interface Props {
   tiles: Tile[];
+  mode: GameMode;
 }
 
-export default function GameBoard({ tiles }: Props) {
-  // Responsive cell size
+export default function GameBoard({ tiles, mode }: Props) {
   const boardSize = Math.min(typeof window !== "undefined" ? window.innerWidth * 0.92 : 360, 440);
   const cellSize = useMemo(() => Math.floor((boardSize - BOARD_PADDING * 2 - GAP * 5) / 4), [boardSize]);
   const totalSize = cellSize * 4 + GAP * 5 + BOARD_PADDING * 2;
@@ -20,12 +21,10 @@ export default function GameBoard({ tiles }: Props) {
       className="board-glass rounded-2xl relative"
       style={{ width: totalSize, height: totalSize, padding: BOARD_PADDING }}
     >
-      {/* Empty cell grid */}
       <div
         className="relative"
         style={{ width: totalSize - BOARD_PADDING * 2, height: totalSize - BOARD_PADDING * 2 }}
       >
-        {/* Background cells */}
         {Array.from({ length: 4 }, (_, r) =>
           Array.from({ length: 4 }, (_, c) => (
             <div
@@ -43,13 +42,13 @@ export default function GameBoard({ tiles }: Props) {
           ))
         )}
 
-        {/* Tiles */}
         {tiles.map(tile => (
           <GameTile
             key={tile.id}
             tile={tile}
             cellSize={cellSize}
             gap={GAP}
+            mode={mode}
           />
         ))}
       </div>
