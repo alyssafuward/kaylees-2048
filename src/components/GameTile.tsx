@@ -69,7 +69,7 @@ export default function GameTile({ tile, cellSize, gap, mode }: Props) {
   
   const bg = isRainbow ? rainbow.bg : isMagical ? magical.bg : pure.bg;
   const shadow = isRainbow ? rainbow.shadow : isMagical ? `0 0 20px ${magical.glow}, 0 0 40px ${magical.glow.replace(")", ",0.5)")}` : pure.shadow;
-  const text = isRainbow ? rainbow.text : "transparent";
+  const text = isRainbow ? rainbow.text : isMagical ? "currentColor" : "transparent";
   const border = isMagical ? `3px solid ${magical.glow}` : "none";
 
   const x = tile.col * (cellSize + gap) + gap;
