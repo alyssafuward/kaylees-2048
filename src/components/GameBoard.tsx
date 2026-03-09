@@ -16,9 +16,11 @@ export default function GameBoard({ tiles, mode }: Props) {
   const cellSize = useMemo(() => Math.floor((boardSize - BOARD_PADDING * 2 - GAP * 5) / 4), [boardSize]);
   const totalSize = cellSize * 4 + GAP * 5 + BOARD_PADDING * 2;
 
+  const isMagical = mode === "magical";
+
   return (
     <div
-      className="board-glass rounded-2xl relative"
+      className={`${isMagical ? "board-glass-magical" : "board-glass"} rounded-2xl relative`}
       style={{ width: totalSize, height: totalSize, padding: BOARD_PADDING }}
     >
       <div
