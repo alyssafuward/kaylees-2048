@@ -11,6 +11,9 @@ const PREVIEW_COLORS = [
   "hsl(130,60%,45%)", "hsl(210,85%,55%)", "hsl(250,65%,55%)", "hsl(285,75%,60%)",
 ];
 
+// Preview creatures for Magical mode
+const PREVIEW_CREATURES = ["🥚", "⭐", "🦋", "🧚", "🦄", "🐉", "🌟", "✨"];
+
 export default function ModeSelect({ onSelect }: Props) {
   return (
     <div
@@ -60,7 +63,7 @@ export default function ModeSelect({ onSelect }: Props) {
                     <span className="font-black glow-text" style={{ color: "hsl(var(--galaxy-glow))", fontSize: "1.5rem" }}>
                       2048
                     </span>
-                  ) : (
+                  ) : mode.id === "purecolor" ? (
                     <div className="flex flex-wrap gap-0.5 p-1">
                       {PREVIEW_COLORS.map((color, i) => (
                         <div
@@ -72,6 +75,11 @@ export default function ModeSelect({ onSelect }: Props) {
                           }}
                         />
                       ))}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <span style={{ fontSize: "1.2rem" }}>🥚</span>
+                      <span style={{ fontSize: "1.5rem" }}>🦄</span>
                     </div>
                   )}
                 </div>

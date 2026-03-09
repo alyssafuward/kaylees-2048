@@ -1,6 +1,6 @@
 import { Tile } from "@/hooks/use2048";
 import { useEffect, useState } from "react";
-import { type GameMode, getPureColor } from "@/lib/gameMode";
+import { type GameMode, getPureColor, getMagicalCreature } from "@/lib/gameMode";
 
 // Tile color map for Rainbow Numbers mode
 const TILE_COLORS: Record<number, { bg: string; shadow: string; text: string }> = {
@@ -44,47 +44,101 @@ interface Props {
 
 export default function GameTile({ tile, cellSize, gap, mode }: Props) {
   const [animClass, setAnimClass] = useState("");
+  const [showSparkles, setShowSparkles] = useState(false);
 
   useEffect(() => {
     if (tile.isMerged) {
       setAnimClass("animate-tile-merge");
+      if (mode === "magical") {
+        setShowSparkles(true);
+        setTimeout(() => setShowSparkles(false), 600);
+      }
     } else if (tile.isNew) {
       setAnimClass("animate-tile-new");
     }
     const t = setTimeout(() => setAnimClass(""), 600);
     return () => clearTimeout(t);
-  }, [tile.isMerged, tile.isNew, tile.id]);
+  }, [tile.isMerged, tile.isNew, tile.id, mode]);
 
   const isRainbow = mode === "rainbow";
+  const isMagical = mode === "magical";
+  
   const rainbow = getRainbowColor(tile.value);
   const pure = getPureColor(tile.value);
-  const bg = isRainbow ? rainbow.bg : pure.bg;
-  const shadow = isRainbow ? rainbow.shadow : pure.shadow;
+  const magical = getMagicalCreature(tile.value);
+  
+  const bg = isRainbow ? rainbow.bg : isMagical ? magical.bg : pure.bg;
+  const shadow = isRainbow ? rainbow.shadow : isMagical ? `0 0 20px ${magical.glow}, 0 0 40px ${magical.glow.replace(")", ",0.5)")}` : pure.shadow;
   const text = isRainbow ? rainbow.text : "transparent";
+  const border = isMagical ? `3px solid ${magical.glow}` : "none";
 
   const x = tile.col * (cellSize + gap) + gap;
   const y = tile.row * (cellSize + gap) + gap;
 
   return (
-    <div
-      className={`absolute flex items-center justify-center rounded-xl font-black select-none ${animClass}`}
-      style={{
-        width: cellSize,
-        height: cellSize,
-        left: x,
-        top: y,
-        background: bg,
-        boxShadow: shadow,
-        color: text,
-        fontSize: isRainbow ? getFontSize(tile.value) : 0,
-        letterSpacing: "-0.02em",
-        transition: "left 0.12s ease, top 0.12s ease",
-        zIndex: tile.isMerged ? 10 : 5,
-        textShadow: isRainbow ? "0 1px 4px rgba(0,0,0,0.4)" : "none",
-        willChange: "transform",
-      }}
-    >
-      {isRainbow ? tile.value : null}
-    </div>
+    <>
+      <div
+        className={`absolute flex items-center justify-center rounded-xl font-black select-none ${animClass}`}
+        style={{
+          width: cellSize,
+          height: cellSize,
+          left: x,
+          top: y,
+          background: bg,
+          boxShadow: shadow,
+          border,
+          color: text,
+          fontSize: isRainbow ? getFontSize(tile.value) : isMagical ? `${cellSize * 0.55}px` : 0,
+          letterSpacing: "-0.02em",
+          transition: "left 0.12s ease, top 0.12s ease",
+          zIndex: tile.isMerged ? 10 : 5,
+          textShadow: isRainbow ? "0 1px 4px rgba(0,0,0,0.4)" : "none",
+          willChange: "transform",
+        }}
+      >
+        {isRainbow ? tile.value : isMagical ? magical.emoji : null}
+      </div>
+      
+      {/* Sparkle burst animation for magical mode */}
+      {showSparkles && isMagical && (
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: cellSize,
+            height: cellSize,
+            left: x,
+            top: y,
+            zIndex: 15,
+          }}
+        >
+          {Array.from({ length: 12 }).map((_, i) => {
+            const angle = (i * 30) * (Math.PI / 180);
+            const distance = cellSize * 0.8;
+            const dx = Math.cos(angle) * distance;
+            const dy = Math.sin(angle) * distance;
+            return (
+              <div
+                key={i}
+                className="absolute animate-sparkle-burst"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  width: "8px",
+                  height: "8px",
+                  marginLeft: "-4px",
+                  marginTop: "-4px",
+                  animation: `sparkle-burst 0.6s ease-out forwards`,
+                  animationDelay: `${i * 0.02}s`,
+                  "--dx": `${dx}px`,
+                  "--dy": `${dy}px`,
+                } as React.CSSProperties}
+              >
+                ✨
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }
