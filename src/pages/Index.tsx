@@ -68,6 +68,9 @@ export default function Index() {
         {/* Board */}
         <GameBoard tiles={tiles} mode={mode} />
 
+        {/* Arrow controls */}
+        <ArrowControls onMove={move} />
+
         {/* Hint */}
         <p className="text-xs text-center" style={{ color: "hsl(260,30%,40%)" }}>
           {mode === "rainbow"
