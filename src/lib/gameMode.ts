@@ -1,4 +1,4 @@
-export type GameMode = "rainbow" | "purecolor";
+export type GameMode = "rainbow" | "purecolor" | "magical";
 
 export interface GameModeConfig {
   id: GameMode;
