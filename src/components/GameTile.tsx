@@ -1,6 +1,6 @@
 import { Tile } from "@/hooks/use2048";
 import { useEffect, useState } from "react";
-import { type GameMode, getPureColor } from "@/lib/gameMode";
+import { type GameMode, getPureColor, getMagicalCreature } from "@/lib/gameMode";
 
 // Tile color map for Rainbow Numbers mode
 const TILE_COLORS: Record<number, { bg: string; shadow: string; text: string }> = {
