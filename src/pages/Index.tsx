@@ -8,6 +8,7 @@ import WinScreen from "@/components/WinScreen";
 import LoseScreen from "@/components/LoseScreen";
 import ModeSelect from "@/components/ModeSelect";
 import ArrowControls from "@/components/ArrowControls";
+import CreatureGuide from "@/components/CreatureGuide";
 
 export default function Index() {
   const [mode, setMode] = useState<GameMode | null>(null);
@@ -32,64 +33,80 @@ export default function Index() {
     >
       {isMagical ? <CloudBackground /> : <StarBackground />}
 
-      <div className="relative z-10 w-full max-w-[480px] px-4 pt-8 pb-10 flex flex-col items-center gap-5">
+      <div className="relative z-10 w-full flex items-start justify-center gap-3 px-2 pt-8 pb-10">
+        {/* Creature Guide - left side on desktop */}
+        {isMagical && (
+          <div className="hidden lg:block sticky top-8 mt-[140px]">
+            <CreatureGuide />
+          </div>
+        )}
 
-        {/* Title */}
-        <div className="text-center">
-          <h1
-            className={`text-5xl font-black tracking-tight leading-none ${isMagical ? "" : "glow-text"}`}
-            style={{ color: titleColor }}
-          >
-            Kaylee's 2048
-          </h1>
-          <p className="text-xs mt-1 tracking-widest uppercase" style={{ color: textColor }}>
-            {isMagical ? "Magical Creatures ✨" : "Galaxy Edition 🌌"}
+        <div className="max-w-[480px] px-2 flex flex-col items-center gap-5">
+
+          {/* Title */}
+          <div className="text-center">
+            <h1
+              className={`text-5xl font-black tracking-tight leading-none ${isMagical ? "" : "glow-text"}`}
+              style={{ color: titleColor }}
+            >
+              Kaylee's 2048
+            </h1>
+            <p className="text-xs mt-1 tracking-widest uppercase" style={{ color: textColor }}>
+              {isMagical ? "Magical Creatures ✨" : "Galaxy Edition 🌌"}
+            </p>
+          </div>
+
+          {/* Score Row */}
+          <div className="flex gap-3 w-full justify-center">
+            <ScoreCard label="Score" value={score} glow magical={isMagical} />
+            <ScoreCard label="Best" value={bestScore} magical={isMagical} />
+            <button
+              onClick={restart}
+              className={`${isMagical ? "score-card-magical" : "score-card"} px-4 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5`}
+              style={{ color: titleColor }}
+            >
+              <span>↺</span> New
+            </button>
+            <button
+              onClick={() => setMode(null)}
+              className={`${isMagical ? "score-card-magical" : "score-card"} px-4 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5`}
+              style={{ color: textColor }}
+            >
+              <span>◂</span> Mode
+            </button>
+          </div>
+
+          {/* Instructions */}
+          <p className="text-xs text-center" style={{ color: textColor }}>
+            {mode === "rainbow"
+              ? "Arrow keys or swipe to move tiles · Merge matching tiles!"
+              : mode === "magical"
+              ? "Swipe or arrow keys · Merge creatures to evolve them! ✨"
+              : "Swipe or arrow keys · Match colors to climb the rainbow!"}
+          </p>
+
+          {/* Board */}
+          <GameBoard tiles={tiles} mode={mode} />
+
+          {/* Creature Guide - below board on mobile */}
+          {isMagical && (
+            <div className="lg:hidden">
+              <CreatureGuide />
+            </div>
+          )}
+
+          {/* Arrow controls */}
+          <ArrowControls onMove={move} />
+
+          {/* Hint */}
+          <p className="text-xs text-center" style={{ color: hintColor }}>
+            {mode === "rainbow"
+              ? <>Reach <span style={{ color: titleColor }}>2048</span> to win the galaxy 🚀</>
+              : mode === "magical"
+              ? <>Evolve your creatures to reach the <span style={{ color: titleColor }}>Galaxy Guardian</span> 🌌</>
+              : <>Merge your way to the <span style={{ color: titleColor }}>galaxy color</span> 🌈</>}
           </p>
         </div>
-
-        {/* Score Row */}
-        <div className="flex gap-3 w-full justify-center">
-          <ScoreCard label="Score" value={score} glow magical={isMagical} />
-          <ScoreCard label="Best" value={bestScore} magical={isMagical} />
-          <button
-            onClick={restart}
-            className={`${isMagical ? "score-card-magical" : "score-card"} px-4 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5`}
-            style={{ color: titleColor }}
-          >
-            <span>↺</span> New
-          </button>
-          <button
-            onClick={() => setMode(null)}
-            className={`${isMagical ? "score-card-magical" : "score-card"} px-4 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5`}
-            style={{ color: textColor }}
-          >
-            <span>◂</span> Mode
-          </button>
-        </div>
-
-        {/* Instructions */}
-        <p className="text-xs text-center" style={{ color: textColor }}>
-          {mode === "rainbow"
-            ? "Arrow keys or swipe to move tiles · Merge matching tiles!"
-            : mode === "magical"
-            ? "Swipe or arrow keys · Merge creatures to evolve them! ✨"
-            : "Swipe or arrow keys · Match colors to climb the rainbow!"}
-        </p>
-
-        {/* Board */}
-        <GameBoard tiles={tiles} mode={mode} />
-
-        {/* Arrow controls */}
-        <ArrowControls onMove={move} />
-
-        {/* Hint */}
-        <p className="text-xs text-center" style={{ color: hintColor }}>
-          {mode === "rainbow"
-            ? <>Reach <span style={{ color: titleColor }}>2048</span> to win the galaxy 🚀</>
-            : mode === "magical"
-            ? <>Evolve your creatures to reach the <span style={{ color: titleColor }}>Galaxy Guardian</span> 🌌</>
-            : <>Merge your way to the <span style={{ color: titleColor }}>galaxy color</span> 🌈</>}
-        </p>
       </div>
 
       {status === "won" && (
