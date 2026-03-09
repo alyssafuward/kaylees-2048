@@ -36,7 +36,7 @@ export default function Index() {
       <div className="relative z-10 w-full flex items-start justify-center gap-3 px-2 pt-8 pb-10">
         {/* Creature Guide - left side on desktop */}
         {isMagical && (
-          <div className="hidden lg:block sticky top-8 mt-[140px]">
+          <div className="hidden lg:flex lg:flex-col sticky top-8 mt-[168px] self-start">
             <CreatureGuide />
           </div>
         )}
