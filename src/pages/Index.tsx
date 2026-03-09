@@ -1,14 +1,82 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { use2048 } from "@/hooks/use2048";
+import StarBackground from "@/components/StarBackground";
+import GameBoard from "@/components/GameBoard";
+import WinScreen from "@/components/WinScreen";
+import LoseScreen from "@/components/LoseScreen";
 
-const Index = () => {
+export default function Index() {
+  const { tiles, score, bestScore, status, restart, keepPlaying } = use2048();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div
+      className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden"
+      style={{ background: "hsl(255,35%,5%)" }}
+    >
+      <StarBackground />
+
+      <div className="relative z-10 w-full max-w-[480px] px-4 pt-8 pb-10 flex flex-col items-center gap-5">
+
+        {/* Title */}
+        <div className="text-center">
+          <h1
+            className="text-5xl font-black tracking-tight glow-text leading-none"
+            style={{ color: "hsl(280,100%,82%)" }}
+          >
+            2048
+          </h1>
+          <p className="text-xs mt-1 tracking-widest uppercase" style={{ color: "hsl(260,40%,55%)" }}>
+            Galaxy Edition 🌌
+          </p>
+        </div>
+
+        {/* Score Row */}
+        <div className="flex gap-3 w-full justify-center">
+          <ScoreCard label="Score" value={score} glow />
+          <ScoreCard label="Best" value={bestScore} />
+          <button
+            onClick={restart}
+            className="score-card px-4 py-2 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5"
+            style={{ color: "hsl(280,80%,80%)" }}
+          >
+            <span>↺</span> New
+          </button>
+        </div>
+
+        {/* Instructions */}
+        <p className="text-xs text-center" style={{ color: "hsl(260,35%,50%)" }}>
+          Arrow keys or swipe to move tiles · Merge matching tiles!
+        </p>
+
+        {/* Board */}
+        <GameBoard tiles={tiles} />
+
+        {/* How to win hint */}
+        <p className="text-xs text-center" style={{ color: "hsl(260,30%,40%)" }}>
+          Reach <span style={{ color: "hsl(280,80%,70%)" }}>2048</span> to win the galaxy 🚀
+        </p>
       </div>
+
+      {/* Win / Lose overlays */}
+      {status === "won" && (
+        <WinScreen score={score} onKeepPlaying={keepPlaying} onRestart={restart} />
+      )}
+      {status === "lost" && (
+        <LoseScreen score={score} bestScore={bestScore} onRestart={restart} />
+      )}
     </div>
   );
-};
+}
 
-export default Index;
+function ScoreCard({ label, value, glow }: { label: string; value: number; glow?: boolean }) {
+  return (
+    <div className="score-card rounded-xl px-4 py-2 text-center min-w-[80px]">
+      <p className="text-[10px] uppercase tracking-widest" style={{ color: "hsl(260,40%,55%)" }}>{label}</p>
+      <p
+        className={`text-xl font-black leading-tight ${glow ? "glow-text" : ""}`}
+        style={{ color: glow ? "hsl(280,100%,82%)" : "hsl(200,80%,75%)" }}
+      >
+        {value.toLocaleString()}
+      </p>
+    </div>
+  );
+}
