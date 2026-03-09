@@ -23,6 +23,13 @@ export const GAME_MODES: GameModeConfig[] = [
     emoji: "🎨",
     showNumbers: false,
   },
+  {
+    id: "magical",
+    label: "Magical Creatures",
+    description: "Evolve magical beings from eggs to cosmic entities!",
+    emoji: "🦄",
+    showNumbers: false,
+  },
 ];
 
 // Rainbow color chain for Pure Colors mode (maps tile value to color)
