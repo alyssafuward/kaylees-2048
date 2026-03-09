@@ -6,6 +6,7 @@ import GameBoard from "@/components/GameBoard";
 import WinScreen from "@/components/WinScreen";
 import LoseScreen from "@/components/LoseScreen";
 import ModeSelect from "@/components/ModeSelect";
+import ArrowControls from "@/components/ArrowControls";
 
 export default function Index() {
   const [mode, setMode] = useState<GameMode | null>(null);
