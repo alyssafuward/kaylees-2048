@@ -127,7 +127,7 @@ function moveLeft(tiles: Tile[]): { tiles: Tile[]; score: number; moved: boolean
 }
 
 function applyDirection(tiles: Tile[], dir: Direction): { tiles: Tile[]; score: number; moved: boolean } {
-  const rotMap: Record<Direction, number> = { left: 0, up: 1, right: 2, down: 3 };
+  const rotMap: Record<Direction, number> = { left: 0, down: 1, right: 2, up: 3 };
   const grid = tilesToGrid(tiles);
   const rotated = rotateGrid(grid, rotMap[dir]);
   const flatTiles: Tile[] = [];
