@@ -6,10 +6,11 @@ import GameBoard from "@/components/GameBoard";
 import WinScreen from "@/components/WinScreen";
 import LoseScreen from "@/components/LoseScreen";
 import ModeSelect from "@/components/ModeSelect";
+import ArrowControls from "@/components/ArrowControls";
 
 export default function Index() {
   const [mode, setMode] = useState<GameMode | null>(null);
-  const { tiles, score, bestScore, status, restart, keepPlaying } = use2048();
+  const { tiles, score, bestScore, status, move, restart, keepPlaying } = use2048();
 
   if (!mode) {
     return <ModeSelect onSelect={(m) => { setMode(m); restart(); }} />;
@@ -66,6 +67,9 @@ export default function Index() {
 
         {/* Board */}
         <GameBoard tiles={tiles} mode={mode} />
+
+        {/* Arrow controls */}
+        <ArrowControls onMove={move} />
 
         {/* Hint */}
         <p className="text-xs text-center" style={{ color: "hsl(260,30%,40%)" }}>
