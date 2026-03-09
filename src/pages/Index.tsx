@@ -31,7 +31,7 @@ export default function Index() {
             className="text-5xl font-black tracking-tight glow-text leading-none"
             style={{ color: "hsl(var(--galaxy-glow))" }}
           >
-            2048
+            Kaylee's 2048
           </h1>
           <p className="text-xs mt-1 tracking-widest uppercase" style={{ color: "hsl(var(--muted-foreground))" }}>
             Galaxy Edition 🌌
