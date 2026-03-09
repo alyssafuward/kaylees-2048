@@ -14,18 +14,18 @@ const CHAIN = [
 
 export default function CreatureGuide() {
   return (
-    <div className="score-card-magical rounded-2xl px-3 py-4 flex flex-col items-center gap-0.5 min-w-[120px]">
-      <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "hsl(280,60%,50%)" }}>
+    <div className="score-card-magical rounded-2xl px-5 py-5 flex flex-col items-center gap-1 min-w-[190px]">
+      <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "hsl(280,60%,50%)" }}>
         ✨ Evolution ✨
       </p>
       {CHAIN.map((c, i) => (
-        <div key={i} className="flex flex-col items-center">
-          <div className="flex items-center gap-1.5">
-            <span className="text-lg leading-none">{c.emoji}</span>
-            <span className="text-[9px] leading-tight" style={{ color: "hsl(260,30%,45%)" }}>{c.name}</span>
+        <div key={i} className="flex flex-col items-center w-full">
+          <div className="flex items-center gap-3 w-full px-1">
+            <span className="text-3xl leading-none">{c.emoji}</span>
+            <span className="text-sm font-semibold leading-tight" style={{ color: "hsl(260,30%,45%)" }}>{c.name}</span>
           </div>
           {i < CHAIN.length - 1 && (
-            <span className="text-[8px] leading-none my-[-1px]" style={{ color: "hsl(280,50%,70%)" }}>▼</span>
+            <span className="text-xs leading-none my-0.5" style={{ color: "hsl(280,50%,70%)" }}>▼</span>
           )}
         </div>
       ))}
