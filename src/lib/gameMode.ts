@@ -66,3 +66,41 @@ export function getPureColor(value: number): { bg: string; shadow: string } {
   const bg = `hsl(${hue},100%,78%)`;
   return { bg, shadow: `0 0 28px hsl(${hue},100%,78%,0.7)` };
 }
+
+// Magical Creatures chain for Magical mode
+const MAGICAL_CREATURES: { value: number; emoji: string; name: string; glow: string }[] = [
+  { value: 2,    emoji: "🥚", name: "Magic Egg",      glow: "hsl(45,100%,70%)" },
+  { value: 4,    emoji: "⭐", name: "Baby Star",      glow: "hsl(50,100%,65%)" },
+  { value: 8,    emoji: "🦋", name: "Magic Butterfly", glow: "hsl(330,85%,70%)" },
+  { value: 16,   emoji: "🧚", name: "Fairy",          glow: "hsl(280,75%,65%)" },
+  { value: 32,   emoji: "🦄", name: "Unicorn",        glow: "hsl(300,85%,70%)" },
+  { value: 64,   emoji: "🐉", name: "Dragon",         glow: "hsl(140,70%,55%)" },
+  { value: 128,  emoji: "🌟", name: "Giant Star",     glow: "hsl(55,100%,70%)" },
+  { value: 256,  emoji: "✨", name: "Constellation",  glow: "hsl(210,100%,75%)" },
+  { value: 512,  emoji: "🌈", name: "Rainbow Spirit", glow: "hsl(180,100%,70%)" },
+  { value: 1024, emoji: "🔮", name: "Crystal Oracle", glow: "hsl(270,80%,75%)" },
+  { value: 2048, emoji: "🌌", name: "Galaxy Guardian", glow: "hsl(280,100%,68%)" },
+  { value: 4096, emoji: "🪐", name: "Planet Master",  glow: "hsl(30,90%,65%)" },
+  { value: 8192, emoji: "☄️", name: "Comet King",     glow: "hsl(15,100%,70%)" },
+];
+
+export function getMagicalCreature(value: number): { emoji: string; glow: string; bg: string } {
+  const entry = MAGICAL_CREATURES.find(c => c.value === value);
+  if (entry) {
+    return {
+      emoji: entry.emoji,
+      glow: entry.glow,
+      bg: `${entry.glow.replace(")", ",0.15)")}`,
+    };
+  }
+  // Beyond defined values — cycle through cosmic emojis
+  const cosmicEmojis = ["🌠", "💫", "⚡", "🔥", "❄️", "🌊", "🌪️"];
+  const idx = Math.floor(Math.log2(value)) % cosmicEmojis.length;
+  const hue = (idx * 50) % 360;
+  const glow = `hsl(${hue},90%,70%)`;
+  return {
+    emoji: cosmicEmojis[idx],
+    glow,
+    bg: `${glow.replace(")", ",0.15)")}`,
+  };
+}
