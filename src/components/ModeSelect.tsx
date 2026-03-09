@@ -11,6 +11,9 @@ const PREVIEW_COLORS = [
   "hsl(130,60%,45%)", "hsl(210,85%,55%)", "hsl(250,65%,55%)", "hsl(285,75%,60%)",
 ];
 
+// Preview creatures for Magical mode
+const PREVIEW_CREATURES = ["🥚", "⭐", "🦋", "🧚", "🦄", "🐉", "🌟", "✨"];
+
 export default function ModeSelect({ onSelect }: Props) {
   return (
     <div
