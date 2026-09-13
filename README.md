@@ -15,5 +15,11 @@ npm run dev
 
 ## Deployment
 
-Pushes to `main` are built and deployed to GitHub Pages automatically via the
-workflow in `.github/workflows/deploy.yml`.
+Deploys to GitHub Pages from a `gh-pages` branch. To publish the current code:
+
+```sh
+npm run deploy
+```
+
+This builds the app and pushes `dist/` to the `gh-pages` branch, which GitHub
+Pages serves from.
